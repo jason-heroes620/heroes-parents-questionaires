@@ -101,7 +101,7 @@ class QuestionController extends Controller
             "Nurturer" => ["Gentle Nurturer", "Co-Regulator", "EQ Builder", "Solo Rock"],
 
             'Structurer' => ['The Disciplinarian', 'High Achiever', 'The Helicopter Parent',  'Curriculum Curator'],
-            'Freedom' => ['Creatiive Explorer', 'Brave Advernturer', 'Conscoiurs Parent', 'Gentle Rebel'],
+            'Freedom' => ['Creatiive Explorer', 'Brave Adventurer', 'Conscoiurs Parent', 'Gentle Rebel'],
         ];
 
         if ($totalScore >= 0 && $totalScore <= 3) {
