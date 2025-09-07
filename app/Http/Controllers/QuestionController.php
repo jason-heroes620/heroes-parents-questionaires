@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\ParentCategories;
 use App\Models\Question;
 use App\Models\SurveyResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class QuestionController extends Controller
 {
@@ -28,11 +30,11 @@ class QuestionController extends Controller
         $category = "";
 
         if ($totalScore >= 42 && $totalScore <= 50) {
-            $category = 'Nurturer';
+            $category = 'Nurturer Parents';
         } elseif ($totalScore >= 33 && $totalScore <= 41) {
-            $category = 'Structurer';
+            $category = 'Structurer Achievers';
         } elseif ($totalScore >= 25 && $totalScore <= 32) {
-            $category = 'Freedom';
+            $category = 'Freedom Seeker';
         } elseif ($totalScore >= 17 && $totalScore <= 24) {
             $category = 'Efficiency Driven';
         } elseif ($totalScore >= 9 && $totalScore <= 16) {
@@ -70,7 +72,7 @@ class QuestionController extends Controller
         $totalScore = collect($section2)->sum('weight');
         $subCategory = "";
 
-        $subTypes = ['Nurturer' => 4, 'Structurer' => 4, 'Freedom' => 4, 'Efficiency Driven' => 3, 'Community Anchored' => 3, 'Value Centric' => 2];
+        $subTypes = ['Nurturer Parents' => 4, 'Structurer Achievers' => 4, 'Freedom Seeker' => 4, 'Efficiency Driven' => 3, 'Community Anchored' => 3, 'Value Centric' => 2];
 
         if ($subTypes[$category] === 4) {
             $subCategory = $this->ResponseCount4($totalScore, $category);
@@ -91,17 +93,19 @@ class QuestionController extends Controller
             'section2_responses' => json_encode($section2)
         ]);
 
-        return response()->json(['subCategory' => $subCategory]);
+        $categoryDescription = ParentCategories::where('category', $category)->first();
+        $subCategoryDescription = ParentCategories::where('subCategory', $subCategory)->first();
+
+        return response()->json(compact('subCategory', 'categoryDescription', 'subCategoryDescription'));
     }
 
     private function ResponseCount4($totalScore, $category)
     {
         $subCategory = "";
         $subCategories = [
-            "Nurturer" => ["Gentle Nurturer", "Co-Regulator", "EQ Builder", "Solo Rock"],
-
-            'Structurer' => ['The Disciplinarian', 'High Achiever', 'The Helicopter Parent',  'Curriculum Curator'],
-            'Freedom' => ['Creatiive Explorer', 'Brave Adventurer', 'Conscoiurs Parent', 'Gentle Rebel'],
+            "Nurturer Parents" => ["Gentle Nurturer", "Co-Regulator", "EQ Builder", "Solo Rock"],
+            'Structurer Achievers' => ['The Disciplinarian', 'High Achiever', 'Helicopter Parent',  'Homeschool Curriculum Curator'],
+            'Freedom Seeker' => ['Creative Explorer', 'Independent Encourager', 'Creative Inspirer', 'Flexible Partner'],
         ];
 
         if ($totalScore >= 0 && $totalScore <= 3) {
@@ -121,8 +125,8 @@ class QuestionController extends Controller
     {
         $subCategory = "";
         $subCategories = [
-            "Efficiency Driven" => ["Working Parent", "Outsourcer", "Digital-First"],
-            'Community Anchored' => ['Worrior Parent', 'Community Centric', 'Aspirational Network']
+            "Efficiency Driven" => ["Time Manager", "Practical Problem-Solver", "Results-Oriented"],
+            'Community Anchored' => ['The Connector', 'Support Networker', 'Cause-Driven']
         ];
         if ($totalScore >= 0 && $totalScore <= 5) {
             $subCategory = $subCategories[$category][2];
@@ -139,7 +143,7 @@ class QuestionController extends Controller
     {
         $subCategory = "";
         $subCategories = [
-            "Value Centric" => ["Cultural Keeper", "Eco-Conscious"],
+            "Value Centric" => ["Tradition Keeper", "Faith-Guided"],
         ];
         if ($totalScore >= 0 && $totalScore <= 5) {
             $subCategory = $subCategories[$category][1];
@@ -148,5 +152,10 @@ class QuestionController extends Controller
         }
 
         return $subCategory;
+    }
+
+    public function result()
+    {
+        return Inertia::render('Result');
     }
 }

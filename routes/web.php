@@ -18,3 +18,5 @@ Route::post('/submit-section1', [QuestionController::class, 'submitSection1'])->
 
 Route::get('/section2/{category}', [QuestionController::class, 'getSection2Questions']);
 Route::post('/submit-survey/{category}', [QuestionController::class, 'submitSurvey'])->name('submit.survery');
+
+Route::get('/result', [QuestionController::class, 'result'])->name('result');

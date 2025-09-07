@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Result from "./Result";
 
 interface Answer {
     id: number;
@@ -26,6 +27,9 @@ const Survey: React.FC = () => {
     const [subCategory, setSubCategory] = useState("");
     const [section1Questions, setSection1Questions] = useState<Question[]>([]);
     const [section2Questions, setSection2Questions] = useState<Question[]>([]);
+
+    const [categoryDescription, setCategoryDescription] = useState("");
+    const [subCategoryDescription, setSubCategoryDescription] = useState("");
 
     // Load Section 1 questions
     React.useEffect(() => {
@@ -97,8 +101,9 @@ const Survey: React.FC = () => {
                 section2: responses2,
             })
             .then((resp) => {
-                console.log(resp.data);
                 setSubCategory(resp.data.subCategory);
+                setCategoryDescription(resp.data.categoryDescription);
+                setSubCategoryDescription(resp.data.subCategoryDescription);
             });
 
         nextStep();
@@ -108,7 +113,7 @@ const Survey: React.FC = () => {
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-12 px-4">
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-8">
                 <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-                    Parent Personality Survey
+                    Parenting Style Survey
                 </h1>
 
                 {/* Progress Bar */}
@@ -173,7 +178,7 @@ const Survey: React.FC = () => {
                                     {q.answers.map((a) => (
                                         <label
                                             key={a.id}
-                                            className={`flex items-center p-3 border rounded cursor-pointer ${
+                                            className={`flex items-center p-2 border rounded cursor-pointer ${
                                                 section1Responses[q.id] === a.id
                                                     ? "border-blue-500 bg-blue-50"
                                                     : "border-gray-200"
@@ -194,7 +199,7 @@ const Survey: React.FC = () => {
                                                 }
                                                 className="sr-only"
                                             />
-                                            <span className="w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3">
+                                            <span className="w-12 md:w-5 h-5 border-2 rounded-full flex items-center justify-center mr-3">
                                                 {section1Responses[q.id] ===
                                                     a.id && (
                                                     <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
@@ -233,11 +238,14 @@ const Survey: React.FC = () => {
 
                 {step === 3 && (
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold text-blue-600">
+                        {/* <h2 className="text-2xl font-bold text-blue-600">
                             Category: {category}
-                        </h2>
-                        <p className="text-gray-600 mt-2">
+                        </h2> */}
+                        {/* <p className="text-gray-600 mt-2">
                             Based on your responses
+                        </p> */}
+                        <p className="text-gray-600 mt-2">
+                            You're almost complete!
                         </p>
                         <button
                             onClick={nextStep}
@@ -250,9 +258,9 @@ const Survey: React.FC = () => {
 
                 {step === 4 && (
                     <div>
-                        <h2 className="text-xl font-semibold mb-6">
+                        {/* <h2 className="text-xl font-semibold mb-6">
                             Section 2: {category}
-                        </h2>
+                        </h2> */}
                         {section2Questions.map((q) => (
                             <div key={q.id} className="mb-6">
                                 <p className="font-medium text-gray-800 mb-3">
@@ -315,20 +323,12 @@ const Survey: React.FC = () => {
                 )}
 
                 {step === 5 && (
-                    <div className="text-center">
-                        <h2 className="text-2xl font-bold text-green-600">
-                            🎉 Thank You!
-                        </h2>
-                        <p className="mt-4 text-gray-700">
-                            Your category: <strong>{category}</strong>
-                        </p>
-                        <p className="text-gray-700">
-                            Sub-category: <strong>{subCategory}</strong>
-                        </p>
-                        <p className="mt-6 text-gray-600">
-                            We appreciate your participation!
-                        </p>
-                    </div>
+                    <Result
+                        category={category}
+                        subCategory={subCategory}
+                        categoryDescription={categoryDescription}
+                        subCategoryDescription={subCategoryDescription}
+                    />
                 )}
             </div>
         </div>

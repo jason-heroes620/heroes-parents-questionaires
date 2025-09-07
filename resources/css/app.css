@@ -1,4 +1,6 @@
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -9,9 +11,15 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-amatic: "Amatic SC", sans-serif;
+    --font-raleway: "Raleway", sans-serif;
 }
+
+/* @theme {
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+} */
 
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
@@ -121,10 +129,19 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
+}
+
+.descr ul {
+    padding: 0.25rem;
+}
+.descr li {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 0.25rem;
 }
