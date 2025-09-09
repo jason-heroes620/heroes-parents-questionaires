@@ -30,13 +30,13 @@ class QuestionController extends Controller
         $category = "";
 
         if ($totalScore >= 42 && $totalScore <= 50) {
-            $category = 'Nurturer Parents';
+            $category = 'Nurturer';
         } elseif ($totalScore >= 33 && $totalScore <= 41) {
             $category = 'Structurer Achievers';
         } elseif ($totalScore >= 25 && $totalScore <= 32) {
-            $category = 'Freedom Seeker';
+            $category = 'Freedom Seekers';
         } elseif ($totalScore >= 17 && $totalScore <= 24) {
-            $category = 'Efficiency Driven';
+            $category = 'Efficiency-Driven';
         } elseif ($totalScore >= 9 && $totalScore <= 16) {
             $category = 'Value Centric';
         } else {
@@ -72,7 +72,7 @@ class QuestionController extends Controller
         $totalScore = collect($section2)->sum('weight');
         $subCategory = "";
 
-        $subTypes = ['Nurturer Parents' => 4, 'Structurer Achievers' => 4, 'Freedom Seeker' => 4, 'Efficiency Driven' => 3, 'Community Anchored' => 3, 'Value Centric' => 2];
+        $subTypes = ['Nurturer' => 4, 'Structurer Achievers' => 4, 'Freedom Seekers' => 4, 'Efficiency-Driven' => 3, 'Community Anchored' => 3, 'Value Centric' => 2];
 
         if ($subTypes[$category] === 4) {
             $subCategory = $this->ResponseCount4($totalScore, $category);
@@ -94,7 +94,7 @@ class QuestionController extends Controller
         ]);
 
         $categoryDescription = ParentCategories::where('category', $category)->first();
-        $subCategoryDescription = ParentCategories::where('subCategory', $subCategory)->first();
+        $subCategoryDescription = ParentCategories::where('category', $subCategory)->first();
 
         return response()->json(compact('subCategory', 'categoryDescription', 'subCategoryDescription'));
     }
@@ -103,9 +103,9 @@ class QuestionController extends Controller
     {
         $subCategory = "";
         $subCategories = [
-            "Nurturer Parents" => ["Gentle Nurturer", "Co-Regulator", "EQ Builder", "Solo Rock"],
+            "Nurturer" => ["Gentle Nurturer", "Co-Regulator", "EQ Builder", "Solo Rock"],
             'Structurer Achievers' => ['The Disciplinarian', 'High Achiever', 'Helicopter Parent',  'Homeschool Curriculum Curator'],
-            'Freedom Seeker' => ['Creative Explorer', 'Independent Encourager', 'Creative Inspirer', 'Flexible Partner'],
+            'Freedom Seekers' => ['Creative Explorer', 'Independent Encourager', 'Creative Inspirer', 'Flexible Partner'],
         ];
 
         if ($totalScore >= 0 && $totalScore <= 3) {
@@ -125,7 +125,7 @@ class QuestionController extends Controller
     {
         $subCategory = "";
         $subCategories = [
-            "Efficiency Driven" => ["Time Manager", "Practical Problem-Solver", "Results-Oriented"],
+            "Efficiency-Driven" => ["Time Manager", "Practical Problem-Solver", "Results-Oriented"],
             'Community Anchored' => ['The Connector', 'Support Networker', 'Cause-Driven']
         ];
         if ($totalScore >= 0 && $totalScore <= 5) {
@@ -157,5 +157,15 @@ class QuestionController extends Controller
     public function result()
     {
         return Inertia::render('Result');
+    }
+
+    public function my_clique(Request $request)
+    {
+        $categoryDescription = ParentCategories::leftJoin('colors', 'parent_categories.id', 'colors.category_id')
+            ->where('parent_categories.category', $request->category)->first();
+        $subCategoryDescription = ParentCategories::where('category', $request->subCategory)->first();
+        // dd($categoryDescription);
+        // return response()->json(compact('categoryDescription', 'subCategoryDescription'));
+        return Inertia::render('MyClique', compact('categoryDescription', 'subCategoryDescription'));
     }
 }

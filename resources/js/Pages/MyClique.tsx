@@ -1,64 +1,71 @@
 import BGHuman from "@/components/ui/bg-human";
 import { Link } from "@inertiajs/react";
-import { Pointer, Share, MousePointerClick } from "lucide-react";
+import { Pointer, MousePointerClick } from "lucide-react";
 import { WhatsappShareButton, WhatsappIcon } from "react-share";
 
-const Result = ({
-    category,
+type Description = {
+    id: number;
+    category: string;
+    title: string;
+    description: string;
+    trait: string;
+    color1: string;
+    color2: string;
+};
+const MyClique = ({
     categoryDescription,
-    subCategory,
     subCategoryDescription,
+}: {
+    categoryDescription: Description;
+    subCategoryDescription: Description;
 }) => {
-    category = "Nurturer";
-    subCategory = "Gentle Nurturer";
-    subCategoryDescription = {
-        title: "Connection Comes First",
-        description:
-            "You're the parent whose hugs do half the teaching. Anak you feels safest when your calm presence steadies the room. Your special gift is patience &mdash; you rarely rush to &ldquo;fix,&rdquo; but instead create space for healing. In a world that often praises speed and toughness, you show the power of softness. Your child grows up knowing that love is steady, not conditional. They see that gentleness and firmness can co-exist, and that kindness is not weakness but strength. Teachers and friends will often describe your anak as thoughtful, considerate, and trustworthy.",
-        trait: "You bring peace wherever you go. You're the type of parent who can turn a stressful moment into a calm memory. That's rare, and deeply needed.",
-    };
-    categoryDescription = {
-        title: "",
-        description: `You belong to the ${category} and your unique
-                                strength shines as the ${subCategory}. ${subCategoryDescription?.description}`,
-    };
+    console.log(categoryDescription);
+    const shareUrl = encodeURI(
+        `https://clique.heroes.my/my-clique/${categoryDescription.category}/${subCategoryDescription.category}`
+    );
+    const shareTitle = "What's my clique?";
 
-    const shareUrl = "https://web.whatsapp.com";
-    const shareTitle = "What's my clique!";
-
+    const description = `You belong to the <strong><i>${categoryDescription.category}</i></strong> and your unique strength shines as the <strong><i>${subCategoryDescription.category}</i></strong>. ${subCategoryDescription?.description}`;
+    console.log(categoryDescription);
     return (
-        <div className={`bg-[#fbb6b1] w-full h-screen `}>
+        <div
+            className="w-full h-screen mx-auto"
+            style={{ backgroundColor: `#${categoryDescription.color1}` }}
+        >
             <div className="flex mx-auto">
                 <div className="absolute inset-0 z-0 w-full h-full flex justify-center items-center min-h-screen">
-                    <BGHuman color1="#fbb6b1" color2={"#f89d95"} size={420} />
+                    <BGHuman
+                        color1={`#${categoryDescription.color1}`}
+                        color2={`#${categoryDescription.color2}`}
+                        size={420}
+                    />
                 </div>
                 <div className="flex flex-col px-8 md:px-20 lg:px-40 xl:px-100 py-4 md:py-10 z-10">
                     <div>
                         <p className="mt-4">
                             <strong className="text-6xl font-amatic">
-                                {subCategory}
+                                {subCategoryDescription?.category}
                             </strong>
                         </p>
-                        <p className="font-bold font-raleway text-3xl py-4">
+                        <p className="font-bold font-raleway text-4xl py-4">
                             {subCategoryDescription?.title}
                         </p>
                         <div className="py-4">
                             <div
                                 className="leading-relaxed descr font-raleway text-xl text-justify"
                                 dangerouslySetInnerHTML={{
-                                    __html:
-                                        categoryDescription?.description || "",
+                                    __html: description || "",
                                 }}
                             />
                         </div>
                         <div className="pt-10">
-                            <p className="font-extrabold text-3xl font-amatic uppercase">
+                            <p className="font-extrabold text-4xl font-amatic uppercase">
                                 Your unique trait?
                             </p>
                         </div>
                         <div className="py-4">
                             <div
-                                className="descr leading-relaxed font-raleway text-justify text-xl"
+                                className="descr leading-relaxed font-raleway text-justify text-2xl"
                                 dangerouslySetInnerHTML={{
                                     __html: subCategoryDescription?.trait || "",
                                 }}
@@ -120,4 +127,4 @@ const Result = ({
     );
 };
 
-export default Result;
+export default MyClique;

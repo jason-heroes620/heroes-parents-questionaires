@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Result from "./Result";
+import { router } from "@inertiajs/react";
 
 interface Answer {
     id: number;
@@ -28,8 +28,8 @@ const Survey: React.FC = () => {
     const [section1Questions, setSection1Questions] = useState<Question[]>([]);
     const [section2Questions, setSection2Questions] = useState<Question[]>([]);
 
-    const [categoryDescription, setCategoryDescription] = useState("");
-    const [subCategoryDescription, setSubCategoryDescription] = useState("");
+    const [categoryDescription, setCategoryDescription] = useState({});
+    const [subCategoryDescription, setSubCategoryDescription] = useState({});
 
     // Load Section 1 questions
     React.useEffect(() => {
@@ -258,9 +258,6 @@ const Survey: React.FC = () => {
 
                 {step === 4 && (
                     <div>
-                        {/* <h2 className="text-xl font-semibold mb-6">
-                            Section 2: {category}
-                        </h2> */}
                         {section2Questions.map((q) => (
                             <div key={q.id} className="mb-6">
                                 <p className="font-medium text-gray-800 mb-3">
@@ -322,14 +319,8 @@ const Survey: React.FC = () => {
                     </div>
                 )}
 
-                {step === 5 && (
-                    <Result
-                        category={category}
-                        subCategory={subCategory}
-                        categoryDescription={categoryDescription}
-                        subCategoryDescription={subCategoryDescription}
-                    />
-                )}
+                {step === 5 &&
+                    router.visit(`/my-clique/${category}/${subCategory}`)}
             </div>
         </div>
     );

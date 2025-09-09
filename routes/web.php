@@ -20,3 +20,4 @@ Route::get('/section2/{category}', [QuestionController::class, 'getSection2Quest
 Route::post('/submit-survey/{category}', [QuestionController::class, 'submitSurvey'])->name('submit.survery');
 
 Route::get('/result', [QuestionController::class, 'result'])->name('result');
+Route::get('/my-clique/{category}/{subCategory}', [QuestionController::class, 'my_clique'])->name('myclique');
